@@ -1,4 +1,4 @@
-window.addEventListener('load', init);
+// window.addEventListener('load', init);
 
 //Global variables
 let time =  60;
@@ -15,9 +15,17 @@ const seconds = document.querySelector('#seconds')
 const showName = document.querySelector('#show-name')
 const selectBtn = document.querySelector('#select-id')
 
-const hpOptn = document.querySelector('#hp-option')
-
-showName.innerHTML = selectBtn.value
+// create show dropdown options
+fetch('http://localhost:3000/shows')
+    .then(response => response.json())
+    .then(function(shows){
+      shows.forEach(function(show){
+        selectBtn.innerHTML += `
+        <option value=${show.id}>${show.name}</option>
+        `
+      })
+      console.log(selectBtn)
+    })
 
 
 //words array
@@ -30,7 +38,7 @@ selectBtn.addEventListener('change', function(e){
 })
 
 function getQuotes(show){
-    fetch(`http://localhost:3000/quotes/${show}`)
+    fetch(`http://localhost:3000/shows/${show}/quotes`)
     .then(response => response.json())
     .then(function(quotes){
       quotes.forEach(function(quote){
@@ -39,14 +47,6 @@ function getQuotes(show){
     })
     .then(init)
 }
-
-// fetch('http://localhost:3000/quotes/harry_potter')
-//   .then(response => response.json())
-//   .then(function(quotes){
-//     quotes.forEach(function(quote){
-//       words.push(quote['quote'])
-//     })
-//   }).then(init)
 
 //initialize game
 function init(){
