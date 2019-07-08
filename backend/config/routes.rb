@@ -1,9 +1,10 @@
 Rails.application.routes.draw do
 
-  get 'quotes/index'
-  get 'quotes/:show', to: 'quotes#show'
+  get '/shows', to: 'shows#index'
+  get '/shows/:id', to: 'shows#show'
+  get '/shows/:id/quotes', to: 'shows#quotes'
 
-  resources :users
-  resources :games
+  get '/quotes', to: 'quotes#index'
+  get '/quotes/:id', to: 'quotes#show'
 
 end

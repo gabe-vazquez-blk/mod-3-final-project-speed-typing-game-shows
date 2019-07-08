@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_06_174437) do
+ActiveRecord::Schema.define(version: 2019_07_08_174017) do
 
   create_table "games", force: :cascade do |t|
     t.string "score"
@@ -22,7 +22,14 @@ ActiveRecord::Schema.define(version: 2019_07_06_174437) do
 
   create_table "quotes", force: :cascade do |t|
     t.text "quote"
-    t.string "show"
+    t.integer "show_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["show_id"], name: "index_quotes_on_show_id"
+  end
+
+  create_table "shows", force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

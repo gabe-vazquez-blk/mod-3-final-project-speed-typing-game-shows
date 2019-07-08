@@ -5,7 +5,7 @@ class QuotesController < ApplicationController
   end
 
   def show
-    show_quotes = Quote.select {|quote| quote.show == params[:show]}
-    render json: show_quotes
+    quote = Quote.find(params[:id])
+    render json: quote
   end
 end
