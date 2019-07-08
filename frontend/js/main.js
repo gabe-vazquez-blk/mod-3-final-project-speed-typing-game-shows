@@ -1,7 +1,7 @@
 window.addEventListener('load', init);
 
 //Global variables
-let time =  5;
+let time =  60;
 let score = 0;
 let isPlaying;
 
@@ -12,12 +12,25 @@ const timeDisplay = document.querySelector('#time')
 const scoreDisplay = document.querySelector('#score')
 const message = document.querySelector('#message')
 const seconds = document.querySelector('#seconds')
+const showName = document.querySelector('#show-name')
+const selectBtn = document.querySelector('#select-id')
+
+const hpOptn = document.querySelector('#hp-option')
+
+showName.innerHTML = selectBtn.value
+
 
 //words array
 const words = []
 
+selectBtn.addEventListener('change', function(e){
+  //get quotes based on show selected
+  getQuotes(selectBtn.value)
+
+})
+
 function getQuotes(show){
-  fetch(`http://localhost:3000/quotes/${show}`)
+    fetch(`http://localhost:3000/quotes/${show}`)
     .then(response => response.json())
     .then(function(quotes){
       quotes.forEach(function(quote){
@@ -27,16 +40,17 @@ function getQuotes(show){
     .then(init)
 }
 
-fetch('http://localhost:3000/quotes/harry_potter')
-  .then(response => response.json())
-  .then(function(quotes){
-    quotes.forEach(function(quote){
-      words.push(quote['quote'])
-    })
-  }).then(init)
+// fetch('http://localhost:3000/quotes/harry_potter')
+//   .then(response => response.json())
+//   .then(function(quotes){
+//     quotes.forEach(function(quote){
+//       words.push(quote['quote'])
+//     })
+//   }).then(init)
 
 //initialize game
 function init(){
+  //Select quotes from a certain show
   //load word from array
   showWord(words);
   //start matching on word input
@@ -50,7 +64,7 @@ function init(){
 function startMatch(){
   if(matchWords()){
     isPlaying = true;
-    time = 6;
+    time = 6;//Don't reset the timer maybe?
     showWord(words);
     wordInput.value = '';
     score++;
@@ -97,6 +111,9 @@ function checkStatus(){
     score = 0;
   }
 }
+
+// document.getElementById('personlist').getElementsByTagName('option')[11].selected = 'selected'
+
 //game starts(init) with a button push
 //add difficulty level(see video 26:30)
 //add ability to change difficulty level
