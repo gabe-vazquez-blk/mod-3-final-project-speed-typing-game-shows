@@ -19,11 +19,21 @@
       <!-- Word & Input -->
       <div class="row">
         <div class="col-md-6 mx-auto">
-          <p class="lead">Type The Given Word Within
-            <span class="text-success" id="seconds">5</span> Seconds:</p>
-          <h2 class="display-2 mb-5" id="current-word">hello</h2>
-          <input type="text" class="form-control form-control-lg" placeholder="Start typing..." id="word-input" autofocus>
-          <h4 class="mt-3" id="message"></h4>
+          <h2 id="show-name"></h2>
+            <p class="lead">Type The Given Word Within
+              <span class="text-success" id="seconds">5</span> Seconds:</p>
+            <h2 class="display-2 mb-5" id="current-word">hello</h2>
+              <p>
+                <select id="select-id">
+                  <div class="result">
+                    <option value="harry_potter" id="hp-option" data-id="hp">Harry Potter</option>
+                    <option value="game_of_thrones">Game of Thrones</option>
+                    <option value="Hipster">Hipster</option>
+                  </div>
+                </select>
+              </p>
+            <input type="text" class="form-control form-control-lg" placeholder="Start typing..." id="word-input" autofocus>
+            <h4 class="mt-3" id="message"></h4>
 
           <!-- Time & Score Columns -->
           <div class="row mt-5">
