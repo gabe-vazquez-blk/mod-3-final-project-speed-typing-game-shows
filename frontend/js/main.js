@@ -81,6 +81,7 @@ function matchquotes(){
     wordInput.value = ''
     score++
     if(currentQuoteArray.length === 0){
+      score += 10
       return true
     }
   }
