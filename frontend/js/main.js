@@ -36,6 +36,7 @@ showName.innerHTML = selectBtn.value
 const words = []
 
 startBtn.addEventListener('click', function(e){
+  time = 60;
   getQuotes(selectBtn.value)
 })
 // selectBtn.addEventListener('change', function(e){
@@ -45,6 +46,8 @@ startBtn.addEventListener('click', function(e){
 // })
 
 function getQuotes(show){
+
+
     fetch(`http://localhost:3000/shows/${show}/quotes`)
     .then(response => response.json())
     .then(function(quotes){
@@ -59,6 +62,7 @@ function getQuotes(show){
 function init(){
   //Select quotes from a certain show
   //load word from array
+  //time resets to 60 at start
   showWord(words);
   //start matching on word input
   wordInput.addEventListener('input', startMatch)
@@ -71,12 +75,12 @@ function init(){
 function startMatch(){
   if(matchWords()){
     isPlaying = true;
-    // time = 6;//Don't reset the timer maybe?
     showWord(words);
     wordInput.value = '';
     score++;
   }
   scoreDisplay.innerHTML = score;
+  // time = 60;
 }
 
 //Match currentWord to wordInput
