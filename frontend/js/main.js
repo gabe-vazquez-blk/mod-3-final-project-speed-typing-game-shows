@@ -62,30 +62,30 @@ function init(){
 // START MATCH
 function startMatch(){
   if(matchquotes()){
-    isPlaying = true;
+    isPlaying = true
     // time = 6;//Don't reset the timer maybe?
-    showQuote(quotes);
-    wordInput.value = '';
-    score++;
+    showQuote(quotes)
   }
-  scoreDisplay.innerHTML = score;
-  // time = 60;
+  scoreDisplay.innerHTML = score
 }
 
 // MATCH CURRENTQUOTE INDEXES TO WORD INPUT
 function matchquotes(){
   const currentQuoteArray = currentQuote.innerHTML.split(' ')
-  let currentWord = currentQuoteArray[i]
-  currentQuoteArray.forEach(function(word){
-    if(wordInput.value === word){
-      i++
-      message.innerHTML = 'Correct!';
-      return true;
-    } else {
-      message.innerHTML = '';
-      return false;
+  const word = wordInput.value
+
+  console.log(currentQuoteArray[0])
+  if(word === currentQuoteArray[0]){
+    message.innerHTML = 'Correct!'
+    currentQuoteArray.shift()
+    currentQuote.innerHTML = currentQuoteArray.join(' ')
+    wordInput.value = ''
+    score++
+    if(currentQuoteArray.length === 0){
+      score += 10
+      return true
     }
-  })
+  }
 }
 
 // PICK & SHOW RANDOM QUOTE
