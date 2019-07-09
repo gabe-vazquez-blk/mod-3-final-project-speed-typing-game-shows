@@ -1,81 +1,70 @@
-// window.addEventListener('load', init);
-
-//Global variables
+// ---- GLOBAL VARIABLES ----
 let time =  60;
 let score = 0;
 let isPlaying;
+const quotes = []
 
-//DOM elements
+// ---- DOM ELEMENTS ---
 const wordInput = document.querySelector('#word-input')
-const currentWord = document.querySelector('#current-word')
+const currentQuote = document.querySelector('#current-quote')
 const timeDisplay = document.querySelector('#time')
 const scoreDisplay = document.querySelector('#score')
 const message = document.querySelector('#message')
 const seconds = document.querySelector('#seconds')
 const showName = document.querySelector('#show-name')
 const selectBtn = document.querySelector('#select-id')
-
-// create show dropdown options
-fetch('http://localhost:3000/shows')
-    .then(response => response.json())
-    .then(function(shows){
-      shows.forEach(function(show){
-        selectBtn.innerHTML += `
-        <option value=${show.id}>${show.name}</option>
-        `
-      })
-      console.log(selectBtn)
-    })
-
 const startBtn = document.querySelector('#start-button')
-showName.innerHTML = selectBtn.value
 
+// ---- FETCHES ----
+// SHOW DROPDOWN OPTIONS
+fetch('http://localhost:3000/shows')
+  .then(response => response.json())
+  .then(function(shows){
+    shows.forEach(function(show){
+      selectBtn.innerHTML += `
+      <option value=${show.id}>${show.name}</option>
+      `
+    })
+  })
 
+// PUSH QUOTES TO QUOTES ARRAY
+function getQuotes(show){
+  fetch(`http://localhost:3000/shows/${show}/quotes`)
+  .then(response => response.json())
+  .then(function(quotesObj){
+    quotesObj.forEach(function(quote){
+      quotes.push(quote['quote'])
+    })
+  })
+  .then(init)
+}
 
-//words array
-const words = []
-
+// ---- HELPER FUNCTIONS ----
+// START BUTTON EVENT LISTENER
 startBtn.addEventListener('click', function(e){
   time = 60;
   getQuotes(selectBtn.value)
 })
-// selectBtn.addEventListener('change', function(e){
-//   //get quotes based on show selected
-//   getQuotes(selectBtn.value)
-//
-// })
 
-function getQuotes(show){
-
-
-    fetch(`http://localhost:3000/shows/${show}/quotes`)
-    .then(response => response.json())
-    .then(function(quotes){
-      quotes.forEach(function(quote){
-        words.push(quote['quote'])
-      })
-    })
-    .then(init)
-}
-
-//initialize game
+// INITIALIZE GAME
 function init(){
-  //Select quotes from a certain show
-  //load word from array
-  //time resets to 60 at start
-  showWord(words);
-  //start matching on word input
+  // Select quotes from a certain show from 'quotes' array
+  // Append quote to DOM
+  showQuote(quotes);
+  // Start matching on word input
   wordInput.addEventListener('input', startMatch)
-  //call countdown every second
+  // Call countdown every second
   setInterval(countdown, 1000);
-  //check Game status
+  // Check Game status
   setInterval(checkStatus, 50)
 }
-//Start match
+
+// START MATCH
 function startMatch(){
-  if(matchWords()){
+  if(matchquotes()){
     isPlaying = true;
-    showWord(words);
+    // time = 6;//Don't reset the timer maybe?
+    showQuote(quotes);
     wordInput.value = '';
     score++;
   }
@@ -83,39 +72,45 @@ function startMatch(){
   // time = 60;
 }
 
-//Match currentWord to wordInput
-function matchWords(){
-  if(wordInput.value === currentWord.innerHTML){
-    message.innerHTML = 'Correct!';
-    return true;
-  } else {
-    message.innerHTML = '';
-    return false;
-  }
+// MATCH CURRENTQUOTE INDEXES TO WORD INPUT
+function matchquotes(){
+  const currentQuoteArray = currentQuote.innerHTML.split(' ')
+  let currentWord = currentQuoteArray[i]
+  currentQuoteArray.forEach(function(word){
+    if(wordInput.value === word){
+      i++
+      message.innerHTML = 'Correct!';
+      return true;
+    } else {
+      message.innerHTML = '';
+      return false;
+    }
+  })
 }
 
-//pick and show random word
-function showWord(words){
-  //generate random array index
-  const randIndex = Math.floor(Math.random() * words.length)
-  //output random word
-  currentWord.innerHTML = words[randIndex]
+// PICK & SHOW RANDOM QUOTE
+function showQuote(quotes){
+  // Generate random array index
+  const randIndex = Math.floor(Math.random() * quotes.length)
+  // Output random quote
+  currentQuote.innerHTML = quotes[randIndex]
 }
-//Countdown timer
+
+// COUNTDOWN TIMER
 function countdown(){
-  //Make sure time has not run out
+  // Make sure time has not run out
   if(time > 0){
-    //Decrement time
+    // Decrement time
     time--;
   } else if(time === 0) {
-    //Game is over
+    // Game is over
     isPlaying = false
   }
-  //Show time
+  // Show time
   timeDisplay.innerHTML = time;
 }
 
-//Check game status
+// CHECK GAME STATUS
 function checkStatus(){
   if(!isPlaying && time === 0){
     message.innerHTML = 'Game Over'
@@ -123,8 +118,8 @@ function checkStatus(){
   }
 }
 
-// document.getElementById('personlist').getElementsByTagName('option')[11].selected = 'selected'
-
+// ---- NOTES ---
+//document.getElementById('personlist').getElementsByTagName('option')[11].selected = 'selected'
 //game starts(init) with a button push
 //add difficulty level(see video 26:30)
 //add ability to change difficulty level
