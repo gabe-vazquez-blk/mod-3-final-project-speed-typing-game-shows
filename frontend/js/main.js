@@ -142,7 +142,17 @@ function checkStatus(){
     home.innerHTML =
     `
       <h1>Congratulations!</h1>
-	      <div>Leaderboard</div>
+	      <div class="leaderboard">
+          Leaderboard
+          <div class="leaders">
+            <ul>
+              <li>EEB: 1200</li>
+              <li>JEB: 800</li>
+              <li>JOB: 700</li>
+              <li>GES: 300</li>
+            </ul>
+          </div>
+        </div>
 		    <button id="refresh" type="button" name="button">Try Again</button>
 
     `
