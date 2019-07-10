@@ -86,7 +86,7 @@ startBtn.addEventListener('click', function(e){
 
 // INITIALIZE GAME
 function init(){
-  time = 60
+  time = 1
   // Select quotes from a certain show from 'quotes' array
   // Append quote to DOM
   showQuote(quotes);
@@ -153,29 +153,24 @@ function checkStatus(){
   if(!isPlaying && time === 0){
     home.innerHTML =
     `
-      <h1>Congratulations!</h1>
-	      <div class="leaderboard">
-          Leaderboard
-
-          <div class="leaders">
-            ${theScores}
-          </div>
+      <h3>Game Over!</h3>
+      <h1>${score}</h1>
+        <br><br>
+        <input type="text" id="save-user" placeholder="Name" class="form-control" autofocus>
+        <button id="save-button" type="button" class="btn btn-secondary btn-sm">Save Score</button>
+        <br><br><br>
+      <h1>Leaderboard</h1>
+        <div class="leaders">
+          ${theScores}
         </div>
         <br>
-		    <button id="refresh" type="button" name="button">Try Again</button>
+		  <button id="refresh" type="button" class="btn btn-secondary btn-sm">Try Again</button>
     `
     const refresh = document.querySelector('#refresh')
     refresh.addEventListener('click', function(e){
       location.reload()
     })
-    // currentQuote.innerHTML = ''
-    // message.innerHTML = `
-    // <p>Game Over</p>
-    // <br>
-    // <input type="text" id="save-user" placeholder="Name" autofocus>
-    // <button id="save-button" type="button">Save Game</button>
-    // `
-    // saveBtn()
+    saveBtn()
     clearInterval(statusChecker)
   }
 }
@@ -187,6 +182,7 @@ function saveBtn(){
   saveBtn.addEventListener('click', () => {
     const username = saveUserInput.value
     addUserToDB(username, score)
+    location.reload()
   })
 }
 
