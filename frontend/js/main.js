@@ -1,8 +1,9 @@
 // ---- GLOBAL VARIABLES ----
-let time =  60;
+let time;
 let score = 0;
 let isPlaying;
 const quotes = []
+let statusChecker;
 
 // ---- DOM ELEMENTS ---
 const wordInput = document.querySelector('#word-input')
@@ -15,19 +16,16 @@ const showName = document.querySelector('#show-name')
 const selectBtn = document.querySelector('#select-id')
 const startBtn = document.querySelector('#start-button')
 
+
 // ---- FETCHES ----
-// SHOW DROPDOWN OPTIONS
+// FETCH TO GET NAME OF SHOWS FOR DROPDOWN
 fetch('http://localhost:3000/shows')
   .then(response => response.json())
-  .then(function(shows){
-    shows.forEach(function(show){
-      selectBtn.innerHTML += `
-      <option value=${show.id}>${show.name}</option>
-      `
-    })
+  .then((shows) => {
+    appendShowsToDropdown(shows)
   })
 
-// PUSH QUOTES TO QUOTES ARRAY
+// FETCH TO GET QUOTES
 function getQuotes(show){
   fetch(`http://localhost:3000/shows/${show}/quotes`)
   .then(response => response.json())
@@ -39,14 +37,41 @@ function getQuotes(show){
   .then(init)
 }
 
+// FETCH TO POST NEW USER
+function addUserToDB(username, score){
+  fetch('http://localhost:3000/users',{
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    body: JSON.stringify({
+      name: username,
+      score: score
+    })
+  })
+  .then(response => response.json())
+}
+
 // ---- HELPER FUNCTIONS ----
+// APPEND SHOW DROPDOWN OPTIONS TO THE DOM
+function appendShowsToDropdown(shows){
+  shows.forEach(function(show){
+    selectBtn.innerHTML += `
+    <option value=${show.id}>${show.name}</option>
+    `
+  })
+}
+
 // START BUTTON EVENT LISTENER
 startBtn.addEventListener('click', function(e){
+  message.innerHTML = 'Begin!'
   getQuotes(selectBtn.value)
 })
 
 // INITIALIZE GAME
 function init(){
+  time = 5
   // Select quotes from a certain show from 'quotes' array
   // Append quote to DOM
   showQuote(quotes);
@@ -55,7 +80,7 @@ function init(){
   // Call countdown every second
   setInterval(countdown, 1000);
   // Check Game status
-  setInterval(checkStatus, 50)
+  statusChecker = setInterval(checkStatus, 50)
 }
 
 // START MATCH
@@ -73,8 +98,7 @@ function matchquotes(){
   const currentQuoteArray = currentQuote.innerHTML.split(' ')
   const word = wordInput.value
 
-  console.log(currentQuoteArray[0])
-  if(word === currentQuoteArray[0]){
+  if(word === currentQuoteArray[0] && time !== 0){
     message.innerHTML = 'Correct!'
     currentQuoteArray.shift()
     currentQuote.innerHTML = currentQuoteArray.join(' ')
@@ -112,9 +136,26 @@ function countdown(){
 // CHECK GAME STATUS
 function checkStatus(){
   if(!isPlaying && time === 0){
-    message.innerHTML = 'Game Over'
-    score = 0;
+    currentQuote.innerHTML = ''
+    message.innerHTML = `
+    <p>Game Over</p>
+    <br>
+    <input type="text" id="save-user" placeholder="Name" autofocus>
+    <button id="save-button" type="button">Save Game</button>
+    `
+    saveBtn()
+    clearInterval(statusChecker)
   }
+}
+
+// ACTIVATE SAVE BUTTON
+function saveBtn(){
+  const saveBtn = document.querySelector('#save-button')
+  const saveUserInput = document.querySelector('#save-user')
+  saveBtn.addEventListener('click', () => {
+    const username = saveUserInput.value
+    addUserToDB(username, score)
+  })
 }
 
 // ---- NOTES ---
