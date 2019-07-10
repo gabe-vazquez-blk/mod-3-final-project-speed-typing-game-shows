@@ -20,6 +20,9 @@ const selectBtn = document.querySelector('#select-id')
 const startBtn = document.querySelector('#start-button')
 const row = document.querySelector('.row') // just to test leaderboard
 const home = document.querySelector('#text-container')
+const audio = document.querySelector('#audio-button')
+
+let selections = document.getElementsByTagName('option')
 
 
 // ---- FETCHES ----
@@ -73,13 +76,15 @@ function addUserToDB(username, score){
 function appendShowsToDropdown(shows){
   shows.forEach((show) => {
     selectBtn.innerHTML += `
-    <option value=${show.id}>${show.name}</option>
+    <option id="${show.name}" value=${show.id}>${show.name}</option>
     `
   })
 }
 
 // START BUTTON EVENT LISTENER
 startBtn.addEventListener('click', function(e){
+
+  // audio.play()
   message.innerHTML = 'Begin!'
   getQuotes(selectBtn.value)
 })
@@ -93,7 +98,7 @@ function init(){
   // Start matching on word input
   wordInput.addEventListener('input', startMatch)
   // Call countdown every second
-  setInterval(countdown, 1000);
+  setInterval(countdown, 1000)
   // Check Game status
   statusChecker = setInterval(checkStatus, 50)
 }
@@ -185,6 +190,10 @@ function saveBtn(){
     location.reload()
   })
 }
+//AUDIO BUTTON EVENT LISTENER
+
+
+
 
 // CREATE LEADERBOARD
 function createLeaderboard(users){
