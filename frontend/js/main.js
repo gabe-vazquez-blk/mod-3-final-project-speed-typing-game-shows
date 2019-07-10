@@ -6,6 +6,7 @@ const quotes = []
 let statusChecker;
 let wordsTyped = []
 
+
 // ---- DOM ELEMENTS ---
 const wordInput = document.querySelector('#word-input')
 const currentQuote = document.querySelector('#current-quote')
@@ -17,6 +18,8 @@ const showName = document.querySelector('#show-name')
 const selectBtn = document.querySelector('#select-id')
 const startBtn = document.querySelector('#start-button')
 const row = document.querySelector('.row') // just to test leaderboard
+const home = document.querySelector('#text-container')
+
 
 // ---- FETCHES ----
 // FETCH TO GET NAME OF SHOWS FOR DROPDOWN
@@ -39,13 +42,14 @@ function getQuotes(show){
 }
 
 // FETCH TO GET USERS
-function getUsers(){
+const leaderboard =
   fetch('http://localhost:3000/users')
     .then(response => response.json())
-    .then(users => createLeaderboard(users))
-    .then(console.log('hello'))
-}
-getUsers()
+    // .then(json => console.log(json))
+    .then(users => {
+      createLeaderboard(users)
+    })
+
 
 // FETCH TO POST NEW USER
 function addUserToDB(username, score){
@@ -81,7 +85,7 @@ startBtn.addEventListener('click', function(e){
 
 // INITIALIZE GAME
 function init(){
-  time = 60
+  time = 1
   // Select quotes from a certain show from 'quotes' array
   // Append quote to DOM
   showQuote(quotes);
@@ -146,14 +150,30 @@ function countdown(){
 // CHECK GAME STATUS
 function checkStatus(){
   if(!isPlaying && time === 0){
-    currentQuote.innerHTML = ''
-    message.innerHTML = `
-    <p>Game Over</p>
-    <br>
-    <input type="text" id="save-user" placeholder="Name" autofocus>
-    <button id="save-button" type="button">Save Game</button>
+    home.innerHTML =
     `
-    saveBtn()
+      <h1>Congratulations!</h1>
+	      <div class="leaderboard">
+          Leaderboard
+          <div class="leaders">
+            ${leaderboard}
+          </div>
+        </div>
+		    <button id="refresh" type="button" name="button">Try Again</button>
+
+    `
+    const refresh = document.querySelector('#refresh')
+    refresh.addEventListener('click', function(e){
+      location.reload()
+    })
+    // currentQuote.innerHTML = ''
+    // message.innerHTML = `
+    // <p>Game Over</p>
+    // <br>
+    // <input type="text" id="save-user" placeholder="Name" autofocus>
+    // <button id="save-button" type="button">Save Game</button>
+    // `
+    // saveBtn()
     clearInterval(statusChecker)
   }
 }
@@ -171,7 +191,7 @@ function saveBtn(){
 // CREATE LEADERBOARD
 function createLeaderboard(users){
   const leaderboard = document.createElement('table')
-  users.forEach((user) => {
+  users.forEach( user => {
     leaderboard.innerHTML += `
       <tr>
         <td>${user.name}</td>
@@ -179,7 +199,6 @@ function createLeaderboard(users){
       </tr>
     `
   })
-  // row.innerHTML += leaderboard
 }
 
 
