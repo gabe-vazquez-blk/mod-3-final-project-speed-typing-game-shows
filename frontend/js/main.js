@@ -5,6 +5,7 @@ let isPlaying;
 const quotes = []
 let statusChecker;
 let wordsTyped = []
+let theScores = ''
 
 
 // ---- DOM ELEMENTS ---
@@ -45,8 +46,8 @@ function getQuotes(show){
 const leaderboard =
   fetch('http://localhost:3000/users')
     .then(response => response.json())
-    // .then(json => console.log(json))
     .then(users => {
+      users = users.sort((a, b) => {return b.score - a.score})
       createLeaderboard(users)
     })
 
@@ -85,7 +86,7 @@ startBtn.addEventListener('click', function(e){
 
 // INITIALIZE GAME
 function init(){
-  time = 1
+  time = 60
   // Select quotes from a certain show from 'quotes' array
   // Append quote to DOM
   showQuote(quotes);
@@ -155,12 +156,13 @@ function checkStatus(){
       <h1>Congratulations!</h1>
 	      <div class="leaderboard">
           Leaderboard
+
           <div class="leaders">
-            ${leaderboard}
+            ${theScores}
           </div>
         </div>
+        <br>
 		    <button id="refresh" type="button" name="button">Try Again</button>
-
     `
     const refresh = document.querySelector('#refresh')
     refresh.addEventListener('click', function(e){
@@ -190,15 +192,16 @@ function saveBtn(){
 
 // CREATE LEADERBOARD
 function createLeaderboard(users){
-  const leaderboard = document.createElement('table')
+  table = document.createElement('table')
   users.forEach( user => {
-    leaderboard.innerHTML += `
+    table.innerHTML += `
       <tr>
         <td>${user.name}</td>
         <td>${user.score}</td>
       </tr>
     `
   })
+  theScores = table.outerHTML
 }
 
 

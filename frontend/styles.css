@@ -4,9 +4,18 @@
   font-style: italic;
   justify-content: center;
 }
-.leaderboard{
-  color: white;
+
+table {
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
 }
-.leaders{
-  color: red;
+
+td {
+  text-align: center;
+  padding: 8px;
+}
+
+tr{
+  border: 1px solid red;
 }
