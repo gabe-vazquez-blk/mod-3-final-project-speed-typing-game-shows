@@ -6,6 +6,7 @@ const quotes = []
 let statusChecker;
 let wordsTyped = []
 
+
 // ---- DOM ELEMENTS ---
 const wordInput = document.querySelector('#word-input')
 const currentQuote = document.querySelector('#current-quote')
@@ -16,6 +17,7 @@ const seconds = document.querySelector('#seconds')
 const showName = document.querySelector('#show-name')
 const selectBtn = document.querySelector('#select-id')
 const startBtn = document.querySelector('#start-button')
+const home = document.querySelector('#text-container')
 
 
 // ---- FETCHES ----
@@ -72,7 +74,7 @@ startBtn.addEventListener('click', function(e){
 
 // INITIALIZE GAME
 function init(){
-  time = 60
+  time = 1
   // Select quotes from a certain show from 'quotes' array
   // Append quote to DOM
   showQuote(quotes);
@@ -137,14 +139,25 @@ function countdown(){
 // CHECK GAME STATUS
 function checkStatus(){
   if(!isPlaying && time === 0){
-    currentQuote.innerHTML = ''
-    message.innerHTML = `
-    <p>Game Over</p>
-    <br>
-    <input type="text" id="save-user" placeholder="Name" autofocus>
-    <button id="save-button" type="button">Save Game</button>
+    home.innerHTML =
     `
-    saveBtn()
+      <h1>Congratulations!</h1>
+	      <div>Leaderboard</div>
+		    <button id="refresh" type="button" name="button">Try Again</button>
+
+    `
+    const refresh = document.querySelector('#refresh')
+    refresh.addEventListener('click', function(e){
+      location.reload()
+    })
+    // currentQuote.innerHTML = ''
+    // message.innerHTML = `
+    // <p>Game Over</p>
+    // <br>
+    // <input type="text" id="save-user" placeholder="Name" autofocus>
+    // <button id="save-button" type="button">Save Game</button>
+    // `
+    // saveBtn()
     clearInterval(statusChecker)
   }
 }
