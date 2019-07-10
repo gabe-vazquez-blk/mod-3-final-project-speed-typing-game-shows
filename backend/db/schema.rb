@@ -22,6 +22,8 @@ ActiveRecord::Schema.define(version: 2019_07_08_174017) do
 
   create_table "shows", force: :cascade do |t|
     t.string "name"
+    t.string "background_url"
+    t.string "audio_path"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -1,9 +1,10 @@
 Quote.delete_all
 Show.delete_all
 
-Show.create(name: "Game of Thrones")
-Show.create(name: "Harry Potter")
-Show.create(name: "Test Words")
+Show.create(name: "Game of Thrones", background_url: "", audio_path: "mp3/Opening Credits Game of Thrones Season 8 (HBO) (1).mp3")
+Show.create(name: "Harry Potter", background_url: "", audio_path: "")
+Show.create(name: "Fresh Prince of Bel-Air", background_url: "", audio_path: "")
+Show.create(name: "Hey Arnold", background_url: "", audio_path: "")
 
 
 20.times do
@@ -14,6 +15,10 @@ end
   Quote.create(quote: Faker::Movies::HarryPotter.unique.quote, show_id: Show.all.second.id)
 end
 
-60.times do
-  Quote.create(quote: Faker::Hipster.unique.word, show_id: Show.all.third.id)
+20.times do
+  Quote.create(quote: Faker::TvShows::TheFreshPrinceOfBelAir.unique.quote, show_id: Show.all.third.id)
+end
+
+15.times do
+  Quote.create(quote: Faker::TvShows::HeyArnold.unique.quote, show_id: Show.all.fourth.id)
 end
