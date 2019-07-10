@@ -16,7 +16,7 @@ const seconds = document.querySelector('#seconds')
 const showName = document.querySelector('#show-name')
 const selectBtn = document.querySelector('#select-id')
 const startBtn = document.querySelector('#start-button')
-
+const row = document.querySelector('.row') // just to test leaderboard
 
 // ---- FETCHES ----
 // FETCH TO GET NAME OF SHOWS FOR DROPDOWN
@@ -29,14 +29,23 @@ fetch('http://localhost:3000/shows')
 // FETCH TO GET QUOTES
 function getQuotes(show){
   fetch(`http://localhost:3000/shows/${show}/quotes`)
-  .then(response => response.json())
-  .then(function(quotesObj){
-    quotesObj.forEach(function(quote){
-      quotes.push(quote['quote'])
+    .then(response => response.json())
+    .then((quotesObj) => {
+      quotesObj.forEach((quote) => {
+        quotes.push(quote['quote'])
+      })
     })
-  })
-  .then(init)
+    .then(init)
 }
+
+// FETCH TO GET USERS
+function getUsers(){
+  fetch('http://localhost:3000/users')
+    .then(response => response.json())
+    .then(users => createLeaderboard(users))
+    .then(console.log('hello'))
+}
+getUsers()
 
 // FETCH TO POST NEW USER
 function addUserToDB(username, score){
@@ -57,7 +66,7 @@ function addUserToDB(username, score){
 // ---- HELPER FUNCTIONS ----
 // APPEND SHOW DROPDOWN OPTIONS TO THE DOM
 function appendShowsToDropdown(shows){
-  shows.forEach(function(show){
+  shows.forEach((show) => {
     selectBtn.innerHTML += `
     <option value=${show.id}>${show.name}</option>
     `
@@ -158,6 +167,21 @@ function saveBtn(){
     addUserToDB(username, score)
   })
 }
+
+// CREATE LEADERBOARD
+function createLeaderboard(users){
+  const leaderboard = document.createElement('table')
+  users.forEach((user) => {
+    leaderboard.innerHTML += `
+      <tr>
+        <td>${user.name}</td>
+        <td>${user.score}</td>
+      </tr>
+    `
+  })
+  // row.innerHTML += leaderboard
+}
+
 
 // ---- NOTES ---
 //document.getElementById('personlist').getElementsByTagName('option')[11].selected = 'selected'
