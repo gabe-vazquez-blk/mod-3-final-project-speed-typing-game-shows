@@ -18,6 +18,9 @@ const showName = document.querySelector('#show-name')
 const selectBtn = document.querySelector('#select-id')
 const startBtn = document.querySelector('#start-button')
 const home = document.querySelector('#text-container')
+const audio = document.querySelector('#audio-button')
+
+let selections = document.getElementsByTagName('option')
 
 
 // ---- FETCHES ----
@@ -61,20 +64,22 @@ function addUserToDB(username, score){
 function appendShowsToDropdown(shows){
   shows.forEach(function(show){
     selectBtn.innerHTML += `
-    <option value=${show.id}>${show.name}</option>
+    <option id="${show.name}" value=${show.id}>${show.name}</option>
     `
   })
 }
 
 // START BUTTON EVENT LISTENER
 startBtn.addEventListener('click', function(e){
+  
+  audio.play();
   message.innerHTML = 'Begin!'
   getQuotes(selectBtn.value)
 })
 
 // INITIALIZE GAME
 function init(){
-  time = 1
+  time = 60
   // Select quotes from a certain show from 'quotes' array
   // Append quote to DOM
   showQuote(quotes);
@@ -179,9 +184,13 @@ function saveBtn(){
   saveBtn.addEventListener('click', () => {
     const username = saveUserInput.value
     addUserToDB(username, score)
-    
+
   })
 }
+//AUDIO BUTTON EVENT LISTENER
+
+
+
 
 // ---- NOTES ---
 //document.getElementById('personlist').getElementsByTagName('option')[11].selected = 'selected'
