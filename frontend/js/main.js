@@ -3,6 +3,9 @@ let time =  60;
 let score = 0;
 let isPlaying;
 const quotes = []
+let wordsTyped = []
+
+
 
 // ---- DOM ELEMENTS ---
 const wordInput = document.querySelector('#word-input')
@@ -63,7 +66,6 @@ function init(){
 function startMatch(){
   if(matchquotes()){
     isPlaying = true
-    // time = 6;//Don't reset the timer maybe?
     showQuote(quotes)
   }
   scoreDisplay.innerHTML = score
@@ -73,9 +75,11 @@ function startMatch(){
 function matchquotes(){
   const currentQuoteArray = currentQuote.innerHTML.split(' ')
   const word = wordInput.value
-
+  let currentWord = currentQuoteArray[0] + ' '
   console.log(currentQuoteArray[0])
-  if(word === currentQuoteArray[0]){
+
+  if(word === currentWord){
+    wordsTyped.push(word)
     message.innerHTML = 'Correct!'
     currentQuoteArray.shift()
     currentQuote.innerHTML = currentQuoteArray.join(' ')
@@ -113,7 +117,13 @@ function countdown(){
 // CHECK GAME STATUS
 function checkStatus(){
   if(!isPlaying && time === 0){
-    message.innerHTML = 'Game Over'
+    let totalWords = wordsTyped.slice()
+    let wpm = totalWords.length
+    message.innerHTML = `
+    'Game Over'
+    <br>
+    WPM - ${wpm}
+    `
     score = 0;
   }
 }
