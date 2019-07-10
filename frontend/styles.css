@@ -10,3 +10,6 @@
 .leaders{
   color: red;
 }
+.invisible{
+  display:none
+}

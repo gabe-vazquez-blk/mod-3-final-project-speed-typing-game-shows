@@ -179,6 +179,7 @@ function saveBtn(){
   saveBtn.addEventListener('click', () => {
     const username = saveUserInput.value
     addUserToDB(username, score)
+    
   })
 }
 
