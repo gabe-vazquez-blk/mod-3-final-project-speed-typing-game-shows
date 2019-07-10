@@ -4,6 +4,7 @@ let score = 0;
 let isPlaying;
 const quotes = []
 let statusChecker;
+let wordsTyped = []
 
 // ---- DOM ELEMENTS ---
 const wordInput = document.querySelector('#word-input')
@@ -71,7 +72,7 @@ startBtn.addEventListener('click', function(e){
 
 // INITIALIZE GAME
 function init(){
-  time = 5
+  time = 60
   // Select quotes from a certain show from 'quotes' array
   // Append quote to DOM
   showQuote(quotes);
@@ -87,7 +88,6 @@ function init(){
 function startMatch(){
   if(matchquotes()){
     isPlaying = true
-    // time = 6;//Don't reset the timer maybe?
     showQuote(quotes)
   }
   scoreDisplay.innerHTML = score
@@ -97,8 +97,9 @@ function startMatch(){
 function matchquotes(){
   const currentQuoteArray = currentQuote.innerHTML.split(' ')
   const word = wordInput.value
-
-  if(word === currentQuoteArray[0] && time !== 0){
+  let currentWord = currentQuoteArray[0] + ' '
+  if(word === currentWord && time !== 0){
+    wordsTyped.push(word)
     message.innerHTML = 'Correct!'
     currentQuoteArray.shift()
     currentQuote.innerHTML = currentQuoteArray.join(' ')
