@@ -121,7 +121,7 @@ startBtn.addEventListener('click', function(e){
 
 // INITIALIZE GAME
 function init(){
-  time = 10
+  time = 60
   // Select quotes from a certain show from 'quotes' array
   // Append quote to DOM
   showQuote(quotes);
