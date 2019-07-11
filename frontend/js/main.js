@@ -18,11 +18,13 @@ const seconds = document.querySelector('#seconds')
 const showName = document.querySelector('#show-name')
 const selectBtn = document.querySelector('#select-id')
 const startBtn = document.querySelector('#start-button')
-const row = document.querySelector('.row') // just to test leaderboard
+const audioDiv = document.querySelector('#audio')
 const home = document.querySelector('#text-container')
-const audio = document.querySelector('#audio-button')
-
+const openPage = document.querySelector('#open-page')
+const inGame = document.querySelector('#in-game')
+inGame.style.display = 'none'
 let selections = document.getElementsByTagName('option')
+let audio;
 
 
 // ---- FETCHES ----
@@ -34,8 +36,8 @@ fetch('http://localhost:3000/shows')
   })
 
 // FETCH TO GET QUOTES
-function getQuotes(show){
-  fetch(`http://localhost:3000/shows/${show}/quotes`)
+function getQuotes(showId){
+  fetch(`http://localhost:3000/shows/${showId}/quotes`)
     .then(response => response.json())
     .then((quotesObj) => {
       quotesObj.forEach((quote) => {
@@ -54,6 +56,16 @@ const leaderboard =
       createLeaderboard(users)
     })
 
+// FETCH TO GET AUDIO
+function getAudio(showId){
+  fetch(`http://localhost:3000/shows/${showId}`)
+    .then(response => response.json())
+    .then(show => appendAudio(show.audio_path))
+    .then(showAudio => {
+      audio = document.querySelector('#audio-button')
+      audio.play()
+    })
+}
 
 // FETCH TO POST NEW USER
 function addUserToDB(username, score){
@@ -83,10 +95,11 @@ function appendShowsToDropdown(shows){
 
 // START BUTTON EVENT LISTENER
 startBtn.addEventListener('click', function(e){
-
-  // audio.play()
-  message.innerHTML = 'Begin!'
-  getQuotes(selectBtn.value)
+  const showId = selectBtn.value
+  getQuotes(showId)
+  getAudio(showId)
+  openPage.style.display = 'none'
+  inGame.style.display = 'block'
 })
 
 // INITIALIZE GAME
@@ -126,6 +139,9 @@ function matchquotes(){
     score++
     if(currentQuoteArray.length === 0){
       score += 10
+      message.innerHTML = `
+        <h4 class="animated rotateIn text-success font-weight-bold"> +10 POINTS! </h4>
+      `
       return true
     }
   }
@@ -159,17 +175,23 @@ function checkStatus(){
     home.innerHTML =
     `
       <h3>Game Over!</h3>
-      <h1>${score}</h1>
-        <br><br>
-        <input type="text" id="save-user" placeholder="Name" class="form-control" autofocus>
-        <button id="save-button" type="button" class="btn btn-secondary btn-sm">Save Score</button>
+      <h1  class="animated jello infinite display-1">${score}</h1>
+        <br>
+        <div class="input-group row">
+          <div class="col-xs-2 mx-auto text-center form-inline">
+            <input type="text" id="save-user" placeholder="Name" class="form-control" autofocus>
+            <div class="input-group-append">
+              <button id="save-button" type="button" class="btn btn-light">Save Score</button>
+            </div>
+          </div>
+        </div>
         <br><br><br>
       <h1>Leaderboard</h1>
-        <div class="leaders">
+        <div>
           ${theScores}
         </div>
         <br>
-		  <button id="refresh" type="button" class="btn btn-secondary btn-sm">Try Again</button>
+		  <button id="refresh" type="button" class="btn btn-light">Try Again</button>
     `
     const refresh = document.querySelector('#refresh')
     refresh.addEventListener('click', function(e){
@@ -177,6 +199,7 @@ function checkStatus(){
     })
     saveBtn()
     clearInterval(statusChecker)
+    audio.pause()
   }
 }
 
@@ -190,14 +213,11 @@ function saveBtn(){
     location.reload()
   })
 }
-//AUDIO BUTTON EVENT LISTENER
-
-
-
 
 // CREATE LEADERBOARD
 function createLeaderboard(users){
   table = document.createElement('table')
+  table.className = "table-bordered"
   users.forEach( user => {
     table.innerHTML += `
       <tr>
@@ -209,6 +229,15 @@ function createLeaderboard(users){
   theScores = table.outerHTML
 }
 
+// APPEND AUDIO
+function appendAudio(audioPath){
+  audioDiv.innerHTML = `
+    <audio hidden id="audio-button"  controls src="${audioPath}">
+            Your browser does not support the
+            <code>audio</code> element.
+    </audio>
+  `
+}
 
 // ---- NOTES ---
 //document.getElementById('personlist').getElementsByTagName('option')[11].selected = 'selected'

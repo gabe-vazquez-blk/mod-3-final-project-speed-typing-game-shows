@@ -1,14 +1,23 @@
 #current-quote {
-  color: red;
-  font-size: 15px;
+  /* FONT */
+  color: black;
+  font-size: 1vw;
   font-style: italic;
-  justify-content: center;
+  /* BOX */
+  background-color: white;
+  border-radius: 25px;
+  padding: 20px;
+  padding-top: 75px;
+  width: 530px;
+  height: 200px;
+  box-shadow: 5px 10px 10px black;
 }
 
 table {
   margin-left: auto;
   margin-right: auto;
-  width: 80%;
+  width: 25%;
+
 }
 
 td {
@@ -19,4 +28,9 @@ td {
 tr{
   border: 1px solid white;
   background-color: black;
+}
+
+body {
+    width: 100vw;
+    height: 55vw;
 }

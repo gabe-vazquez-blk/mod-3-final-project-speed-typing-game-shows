@@ -1,9 +1,9 @@
 Quote.delete_all
 Show.delete_all
 
-Show.create(name: "Game of Thrones", background_url: "", audio_path: "mp3/Opening Credits Game of Thrones Season 8 (HBO) (1).mp3")
-Show.create(name: "Harry Potter", background_url: "", audio_path: "")
-Show.create(name: "Fresh Prince of Bel-Air", background_url: "", audio_path: "")
+Show.create(name: "Game of Thrones", background_url: "", audio_path: "mp3/Game_of_Thrones_theme_song.mp3")
+Show.create(name: "Harry Potter", background_url: "", audio_path: "mp3/Harry_Potter_theme_song.mp3")
+Show.create(name: "Fresh Prince of Bel-Air", background_url: "", audio_path: "mp3/Fresh_Prince_of_Bel_Air_theme_song.mp3")
 Show.create(name: "Hey Arnold", background_url: "", audio_path: "")
 
 
