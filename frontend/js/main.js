@@ -6,6 +6,8 @@ const quotes = []
 let statusChecker;
 let wordsTyped = []
 let theScores = ''
+let wpm = 0;
+
 
 
 // ---- DOM ELEMENTS ---
@@ -13,6 +15,7 @@ const wordInput = document.querySelector('#word-input')
 const currentQuote = document.querySelector('#current-quote')
 const timeDisplay = document.querySelector('#time')
 const scoreDisplay = document.querySelector('#score')
+const wpmDisplay = document.querySelector('#wpm')
 const message = document.querySelector('#message')
 const seconds = document.querySelector('#seconds')
 const showName = document.querySelector('#show-name')
@@ -79,7 +82,7 @@ function getBackground(showId){
 }
 
 // FETCH TO POST NEW USER
-function addUserToDB(username, score){
+function addUserToDB(username, score, wpm){
   fetch('http://localhost:3000/users',{
     method: 'POST',
     headers: {
@@ -88,7 +91,8 @@ function addUserToDB(username, score){
     },
     body: JSON.stringify({
       name: username,
-      score: score
+      score: score,
+      wpm: wpm
     })
   })
   .then(response => response.json())
@@ -117,7 +121,7 @@ startBtn.addEventListener('click', function(e){
 
 // INITIALIZE GAME
 function init(){
-  time = 5
+  time = 10
   // Select quotes from a certain show from 'quotes' array
   // Append quote to DOM
   showQuote(quotes);
@@ -150,6 +154,7 @@ function matchquotes(){
     currentQuote.innerHTML = currentQuoteArray.join(' ')
     wordInput.value = ''
     score++
+    wpm++
     if(currentQuoteArray.length === 0){
       score += 10
       message.innerHTML = `
@@ -188,7 +193,7 @@ function checkStatus(){
     home.innerHTML =
     `
       <h3>Game Over!</h3>
-      <h1  class="animated jello infinite display-1">${score}</h1>
+      <h1 class="inline-headers display-1 animated jello infinite ">Score: <span class="text-success font-weight-bold">${score}</span> WPM: <span class="text-success font-weight-bold">${wpm}</span></h1>
         <br>
         <div class="input-group row">
           <div class="col-xs-2 mx-auto text-center form-inline">
@@ -222,7 +227,7 @@ function saveBtn(){
   const saveUserInput = document.querySelector('#save-user')
   saveBtn.addEventListener('click', () => {
     const username = saveUserInput.value
-    addUserToDB(username, score)
+    addUserToDB(username, score, wpm)
     location.reload()
   })
 }
@@ -231,11 +236,17 @@ function saveBtn(){
 function createLeaderboard(users){
   table = document.createElement('table')
   table.className = "table-bordered"
+  table.innerHTML = `
+    <th>User</th>
+    <th>Score</th>
+    <th>WPM</th>
+  `
   users.forEach( user => {
     table.innerHTML += `
       <tr>
         <td>${user.name}</td>
         <td>${user.score}</td>
+        <td>${user.wpm}</td>
       </tr>
     `
   })

@@ -17,6 +17,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:name, :score)
+    params.require(:user).permit(:name, :score, :wpm)
   end
 end
