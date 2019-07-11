@@ -23,10 +23,9 @@ const home = document.querySelector('#text-container')
 const openPage = document.querySelector('#open-page')
 const inGame = document.querySelector('#in-game')
 inGame.style.display = 'none'
+const mainBody = document.querySelector('#main-body')
 let selections = document.getElementsByTagName('option')
 let audio;
-
-
 // ---- FETCHES ----
 // FETCH TO GET NAME OF SHOWS FOR DROPDOWN
 fetch('http://localhost:3000/shows')
@@ -67,6 +66,13 @@ function getAudio(showId){
     })
 }
 
+// FETCH GET BACKGROUND
+function getBackground(showId){
+  fetch(`http://localhost:3000/shows/${showId}`)
+    .then(response => response.json())
+    .then(show => appendBackground(show.background_url))
+}
+
 // FETCH TO POST NEW USER
 function addUserToDB(username, score){
   fetch('http://localhost:3000/users',{
@@ -98,13 +104,14 @@ startBtn.addEventListener('click', function(e){
   const showId = selectBtn.value
   getQuotes(showId)
   getAudio(showId)
+  getBackground(showId)
   openPage.style.display = 'none'
   inGame.style.display = 'block'
 })
 
 // INITIALIZE GAME
 function init(){
-  time = 1
+  time = 60
   // Select quotes from a certain show from 'quotes' array
   // Append quote to DOM
   showQuote(quotes);
@@ -237,6 +244,11 @@ function appendAudio(audioPath){
             <code>audio</code> element.
     </audio>
   `
+}
+
+// APPEND BACKGROUND
+function appendBackground(backgroundUrl){
+  mainBody.style.backgroundImage = `url(${backgroundUrl})`
 }
 
 // ---- NOTES ---
