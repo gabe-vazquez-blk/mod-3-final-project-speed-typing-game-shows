@@ -24,6 +24,7 @@ const openPage = document.querySelector('#open-page')
 const inGame = document.querySelector('#in-game')
 inGame.style.display = 'none'
 const mainBody = document.querySelector('#main-body')
+const openPageLeaderboard = document.querySelector('#open-page-leaderboard')
 let selections = document.getElementsByTagName('option')
 let audio;
 // ---- FETCHES ----
@@ -53,6 +54,10 @@ const leaderboard =
     .then(users => {
       users = users.sort((a, b) => {return b.score - a.score})
       createLeaderboard(users)
+    })
+    .then(next => {
+      openPageLeaderboard.innerHTML +=
+      `${theScores}`
     })
 
 // FETCH TO GET AUDIO
@@ -107,11 +112,12 @@ startBtn.addEventListener('click', function(e){
   getBackground(showId)
   openPage.style.display = 'none'
   inGame.style.display = 'block'
+  wordInput.focus()
 })
 
 // INITIALIZE GAME
 function init(){
-  time = 60
+  time = 5
   // Select quotes from a certain show from 'quotes' array
   // Append quote to DOM
   showQuote(quotes);
